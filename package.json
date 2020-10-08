@@ -1,0 +1,12 @@
+{
+  "name": "webpack5-notes",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Hanqing1996/webpack5-notes.git",
+  "author": "Hanqing1996 <zhq199622@163.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "5.0.0-beta.29",
+    "webpack-cli": "4.0.0-beta.8"
+  }
+}
