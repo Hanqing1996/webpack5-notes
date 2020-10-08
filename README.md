@@ -54,4 +54,42 @@ dist--
 ```
 
 
+#### 【web性能优化】提取公共依赖
+不懂下面的意思[就戳这里,9:00开始](https://xiedaimala.com/tasks/c4500d29-cc52-49fb-ae1b-af6a58baaa95/video_tutorials/46c8eed3-53f3-4b59-a85d-b6952b67887a)
+```
+// a.html=>a.js(lqx)
+// b.html=>b.js(lqx)
+
+// ------
+
+// a.html=>lqx.js&a.js
+// b.html=>lqx.js&b.js
+```
+在入口文件 a.js 和 b.js 中，引用了非入口文件 lqx.js 导出的长字符串。在不做优化的情况下，webpack5 编译后的 a.js 和 b.js 会直接含有该长字符串。
+
+这样就会有一个问题。假如 a.html 引用了 a.js,b.html引用了 b.js。那么 b.js 要去请求下载一遍 a.js 已包含的字符串。
+
+能不能避免这个问题呢？有一个前提要满足
+-编译后的 a.js 和 b.js 中，使用的是由 lqx.js 导出的变量（即引用），即含有 import 语句
+那么只有 lqx.js 被下载时要请求一次字符串资源。a.js 和 b.js 只是使用了由 lqx.js 导出的变量，不必通过网络请求字符串资源。
+
+* 解决方法:配置 webpack.config.js 的 optimization，使 a.js 和 b.js 被优化
+```
+optimization: {
+    splitChunks: {
+        minSize: 1,  // 超过1字节的文件就要优化
+        chunks(chunk){
+            return !['lqx'].includes(chunk.name) // 只要文件名不是 lqx，就要优化
+        },
+        name:'commons' // 公共依赖文件名
+    }
+}
+```
+
+
+
+
+
+
+
 
