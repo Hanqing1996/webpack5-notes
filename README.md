@@ -25,6 +25,8 @@ console.log(pig.name);
 ```
 (()=>{"use strict";console.log("pig")})();
 ```
+除此之外，入口文件中没有被用到的函数，也会在编译时被忽略
+
 
 #### 啥是 Devtool
 * Source map
@@ -65,6 +67,12 @@ dist--
 // a.html=>lqx.js&a.js
 // b.html=>lqx.js&b.js
 ```
+
+![00kmqA.png](https://s1.ax1x.com/2020/10/08/00kmqA.png)
+
+![00klPf.png](https://s1.ax1x.com/2020/10/08/00klPf.png)
+
+
 在入口文件 a.js 和 b.js 中，引用了非入口文件 lqx.js 导出的长字符串。在不做优化的情况下，webpack5 编译后的 a.js 和 b.js 会直接含有该长字符串。
 
 这样就会有一个问题。假如 a.html 引用了 a.js,b.html引用了 b.js。那么 b.js 要去请求下载一遍 a.js 已包含的字符串。
@@ -88,6 +96,47 @@ optimization: {
 
 
 
+#### splitChunks.chunks
+
+[官方文档](https://webpack.js.org/plugins/split-chunks-plugin/#splitchunkschunks)
+```
+module.exports = {
+  //...
+  optimization: {
+    splitChunks: {
+      // include entry files
+      chunks: 'initial'
+    }
+  }
+};
+```
+* async 
+只优化异步加载的文件
+* all
+优化所有文件
+
+
+#### 如果有一个入口文件有箭头函数，如何将其转译为更低版本的 js，以兼容IE11
+* 解决方法：配置 [babel-loader](https://webpack.docschina.org/loaders/babel-loader/)
+```
+yarn add -D babel-loader @babel/core @babel/preset-env webpack
+```
+```
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use:{
+                    loader: "babel-loader",
+                    options: {
+                        presets:[`@babel/preset-env`]
+                    }
+                }
+            }
+        ]
+    },
+```
 
 
 

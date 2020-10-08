@@ -6,7 +6,10 @@
   "author": "Hanqing1996 <zhq199622@163.com>",
   "license": "MIT",
   "devDependencies": {
-    "webpack": "5.0.0-beta.29",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.44.2",
     "webpack-cli": "4.0.0-beta.8"
   }
 }
